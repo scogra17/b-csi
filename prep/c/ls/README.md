@@ -1,12 +1,12 @@
 ## Description
 `ls.c` implements the basic functionality of the typical command line function
- ls, including:
+ `ls`, including:
 * listing files and directories (entries) in the directory specified by the
  first positional argument
 * listing entries' size in bytes, time last modified (see TODO), and name
 
 ## Usage
-From the same directlry where `ls.c` is located:
+From the same directory where `ls.c` is located:
 1. Compile `ls.c`
 ```
 > make build
@@ -34,7 +34,7 @@ For this project directory:
 
 ## TODO
 * Format epoch into human readable timestamps
-* Format size into K(kilo), M(mega), etc.
+* Format size into K(kilobytes), M(megabytes), etc. rather than just B(bytes)
 * Include optional flags (the current implementation behaves as if these are set):
   * `l`: display full info; withouth this flag, only diplay entry names
   * `a`: display all entries;without this flag, ignore entries beginning with `.`
