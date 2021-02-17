@@ -1,1 +1,0 @@
-* ls source code ([github](http://git.savannah.gnu.org/cgit/coreutils.git/tree/src/ls.c))

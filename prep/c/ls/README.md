@@ -18,12 +18,11 @@
 ## TODO
 * Format epoch into human readable timestamps
 * Format size into K(kilo), M(mega), etc.
-* Include optional flags:
-  * l: withouth this flag, only entry names will be displayed; with this flag
-   display full info
-  * a: without this flag, ignore entries beginning with `.`
+* Include optional flags (the current implementation behaves as if these are set):
+  * `l`: display full info; withouth this flag, only diplay entry names
+  * `a`: display all entries;without this flag, ignore entries beginning with `.`
 * Create help documentation
 
 ## Resources
 * [ls manual](https://linuxcommand.org/lc3_man_pages/ls1.html)
-* [~actual~ ls implementation](https://git.savannah.gnu.org/cgit/coreutils.git/tree/src/ls.c)
+* [***actual*** ls implementation](https://git.savannah.gnu.org/cgit/coreutils.git/tree/src/ls.c)
