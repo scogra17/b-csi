@@ -21,8 +21,8 @@ int main(int argc, char * argv[]) {
 }
 
 void list_entries(char path[]) {
-  DIR *dirptr;
-  struct dirent *direntptr;
+  DIR* dirptr;
+  struct dirent* direntptr;
   struct stat filestat;
 
   dirptr = opendir(path);
