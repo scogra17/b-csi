@@ -53,8 +53,21 @@ func compute(memory []byte) {
 			registers[operand1] += registers[operand2]
 		case Sub:
 			registers[operand1] -= registers[operand2]
+		case Addi:
+			registers[operand1] += operand2
+		case Subi:
+			registers[operand1] -= operand2
+		case Jump:
+			registers[0] = operand1
+		case Beqz:
+			if registers[operand1] == 0 {
+				registers[0] += operand2
+			}
 		}
 
-		registers[0] += 3
+		if opcode != Jump {
+			registers[0] += 3
+		}
+
 	}
 }
