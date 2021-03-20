@@ -1,5 +1,7 @@
 package vm
 
+import "fmt"
+
 const (
 	Load  = 0x01
 	Store = 0x02
@@ -38,13 +40,10 @@ func compute(memory []byte) {
 		operand1 := memory[pc+1]
 		operand2 := memory[pc+2]
 
-		// break out of loop when we reach halt
-		if opcode == Halt {
-			break
-		}
-
 		// decode and execute
 		switch opcode {
+		case Halt:
+			return
 		case Load:
 			registers[operand1] = memory[operand2]
 		case Store:
@@ -63,6 +62,8 @@ func compute(memory []byte) {
 			if registers[operand1] == 0 {
 				registers[0] += operand2
 			}
+		default:
+			panic(fmt.Sprintf("unknown opcode: %d", opcode))
 		}
 
 		if opcode != Jump {
