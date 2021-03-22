@@ -1,21 +1,22 @@
+// Package vm implements a simple virtual machine fetch-decode-execute loop
 package vm
 
-import "fmt"
-
-const (
-	Load  = 0x01
-	Store = 0x02
-	Add   = 0x03
-	Sub   = 0x04
-	Halt  = 0xff
+import (
+	"fmt"
 )
 
-// Stretch goals
 const (
-	Addi = 0x05
-	Subi = 0x06
-	Jump = 0x07
-	Beqz = 0x08
+	Load                      = 0x01
+	Store                     = 0x02
+	Add                       = 0x03
+	Sub                       = 0x04
+	Halt                      = 0xff
+	Addi                      = 0x05
+	Subi                      = 0x06
+	Jump                      = 0x07
+	Beqz                      = 0x08
+	writeableMemoryUpperLimit = 0x07
+	instructionIncrement      = 3
 )
 
 // Given a 256 byte array of "memory", run the stored program
@@ -27,14 +28,14 @@ const (
 // __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ ... __
 // ^==DATA===============^ ^==INSTRUCTIONS==============^
 //
-func compute(memory []byte) {
+func compute(memory []byte) error {
 
 	registers := [3]byte{8, 0, 0} // PC, R1 and R2
 
 	// Keep looping, like a physical computer's clock
 	for {
 
-		// fetch the opcode and operands
+		// fetch program counter, opcode and operands
 		pc := registers[0]
 		opcode := memory[pc]
 		operand1 := memory[pc+1]
@@ -43,10 +44,13 @@ func compute(memory []byte) {
 		// decode and execute
 		switch opcode {
 		case Halt:
-			return
+			return nil
 		case Load:
 			registers[operand1] = memory[operand2]
 		case Store:
+			if operand2 > writeableMemoryUpperLimit {
+				return fmt.Errorf("memory address %x is not writeable", operand2)
+			}
 			memory[operand2] = registers[operand1]
 		case Add:
 			registers[operand1] += registers[operand2]
@@ -67,7 +71,7 @@ func compute(memory []byte) {
 		}
 
 		if opcode != Jump {
-			registers[0] += 3
+			registers[0] += instructionIncrement
 		}
 
 	}
