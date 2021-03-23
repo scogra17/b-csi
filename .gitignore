@@ -1,3 +1,4 @@
 bash/
-prep/
+prep/*
+!prep/c/ls/
 .vscode/*
