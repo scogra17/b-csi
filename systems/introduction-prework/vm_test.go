@@ -80,16 +80,6 @@ halt`,
 		cases:  []vmCase{{42, 0, 0}},
 		errExp: fmt.Errorf("memory address 9 is not writeable"),
 	},
-	{
-		name: "Jump",
-		asm: `
-	load r1 1
-	jump 16
-	store r1 0
-	halt`,
-		cases:  []vmCase{{42, 0, 0}},
-		errExp: nil,
-	},
 	// Support a "branch if equal to zero" with relative offsets
 	{
 		name: "Beqz",

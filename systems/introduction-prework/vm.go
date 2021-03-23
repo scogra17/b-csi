@@ -16,6 +16,7 @@ const (
 	Jump                      = 0x07
 	Beqz                      = 0x08
 	writeableMemoryUpperLimit = 0x07
+	memoryUpperLimit          = 0xff
 	instructionIncrement      = 3
 )
 
@@ -34,17 +35,20 @@ func compute(memory []byte) error {
 
 	// Keep looping, like a physical computer's clock
 	for {
-
-		// fetch program counter, opcode and operands
+		// fetch program counter and opcode
 		pc := registers[0]
 		opcode := memory[pc]
+
+		if opcode == Halt {
+			return nil
+		}
+
+		// fetch operands from memory using register values
 		operand1 := memory[pc+1]
 		operand2 := memory[pc+2]
 
 		// decode and execute
 		switch opcode {
-		case Halt:
-			return nil
 		case Load:
 			registers[operand1] = memory[operand2]
 		case Store:
