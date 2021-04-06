@@ -1,9 +1,14 @@
 bash/
 
+# only include ls program under prep/c/ dir
 prep/*
 !prep/c/
 
 prep/c/*
 !prep/c/ls/
 
+# exclude environment files
 .vscode/*
+
+# exclude saved text PDFs
+texts/
