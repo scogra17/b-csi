@@ -7,6 +7,6 @@ sum_to_n:
 	add r11, rdi  ; add value to running total 
 	sub rdi, 1    ; decrement n
 	cmp rdi, 0    ; check if n is equal to 0 
-	jne .loop     ; if n is not equal to 0, re-run the loop
+	jge .loop     ; if n is not equal to 0, re-run the loop
 	mov rax, r11  ; move the total into the return register rax
 	ret

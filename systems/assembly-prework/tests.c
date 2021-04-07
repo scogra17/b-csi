@@ -24,34 +24,34 @@ void test_convert_10101101(void) {
   TEST_ASSERT_EQUAL(173, binary_convert("10101101"));
 }
 
-void test_pangram_empty(void) { TEST_ASSERT_FALSE(pangram("")); }
+void test_pangram_empty(void) { TEST_ASSERT_EQUAL(1, pangram("")); }
 void test_pangram_alpha(void) {
-  TEST_ASSERT_TRUE(pangram("abcdefghijklmnopqrstuvwxyz"));
+  TEST_ASSERT_EQUAL(0, pangram("abcdefghijklmnopqrstuvwxyz"));
 }
 void test_pangram_punctuated(void) {
-  TEST_ASSERT_TRUE(pangram("abc, def! ghi... jkl25; mnopqrstuvwxyz"));
+  TEST_ASSERT_EQUAL(0, pangram("abc, def! ghi... jkl25; mnopqrstuvwxyz"));
 }
 void test_pangram_incomplete(void) {
-  TEST_ASSERT_FALSE(pangram("abcdefghijklmnopqrstuvwxy"));
+  TEST_ASSERT_EQUAL(1, pangram("abcdefghijklmnopqrstuvwxy"));
 }
 void test_pangram_mixed_case(void) {
-  TEST_ASSERT_TRUE(pangram("ABCdefGHIjklMNOpqrSTUvwxYZ"));
+  TEST_ASSERT_EQUAL(0, pangram("ABCdefGHIjklMNOpqrSTUvwxYZ"));
 }
 void test_pangram_phrase(void) {
-  TEST_ASSERT_TRUE(pangram("the quick brown fox jumps over teh lazy dog"));
+  TEST_ASSERT_EQUAL(0, pangram("the quick brown fox jumps over teh lazy dog"));
 }
 
 int main(void) {
     UNITY_BEGIN();
 
-    // RUN_TEST(test_sum_to_0);
-    // RUN_TEST(test_sum_to_1);
+    RUN_TEST(test_sum_to_0);
+    RUN_TEST(test_sum_to_1);
     RUN_TEST(test_sum_to_3);
     RUN_TEST(test_sum_to_10);
     RUN_TEST(test_sum_to_1000);
 
-    // RUN_TEST(test_convert_0);
-    // RUN_TEST(test_convert_1);
+    RUN_TEST(test_convert_0);
+    RUN_TEST(test_convert_1);
     RUN_TEST(test_convert_110);
     RUN_TEST(test_convert_1111);
     RUN_TEST(test_convert_10101101);
