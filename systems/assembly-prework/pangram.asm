@@ -10,23 +10,20 @@ pangram:
 	cmp r12b, 0x0        ; check byte value for null value
 	je .test             ; determine if we've seen all letters by checking for the null character
 	or r12b, 0b00100000  ; lower case character by flipping a single bit (see ascii table for reference)
-	sub r12b, 97         ; convert ascii values to numbers 0d0-0d26
-	cmp r12b, 0          ; skip to next iteration if character is not a letter
-	jl .loop
-	cmp r12b, 26
-	jg .loop
+	sub r12b, 97         ; convert ascii values to numbers where 0d0 corresponds to 'a' and 0d26 correponds to 'z'
 	xor r10, r10         ; zero out register to store bit representing seen letter
 	btc r10, r12         ; flip appropraite bit (e.g. bit 1 for 'a', bit 2 for 'b', etc.)
 	or r13, r10          ; set the corresponding bit to 1 
 	jmp .loop            ; proceed to the next character
 
 .test:
-	mov rax, 1                            ; store false value in return register
-	cmp r13, 0b11111111111111111111111111 ; compare record of letters seen with 26 1's
-	je .pass                              ; if equal, pass
+	xor rax, rax         ; zero out return register, which if unchanged will return "false"     
+	and r13, 0x03ffffff  ; zero out bits that don't correspond to letters
+	cmp r13, 0x03ffffff  ; check if we encountered all letters
+	je .pass                           
 	ret                         
 
 .pass:
-	mov rax, 0 ; store true value in return register
+	mov al, 0xff ; store all ones ("true") in the lower order byte of the return register
 	ret   
 

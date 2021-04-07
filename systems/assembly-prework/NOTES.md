@@ -148,3 +148,8 @@ loop:
   ; do something 
 ```
 one difference is that lldb did not reach the label until the preceding `.` was added
+
+## Questions 
+* How do cmp, sub etc. use rflags and the carry flag in particular? What uses do the carry flags have? 
+* What is the significance of `movzx` vs. `mov`? 
+* Why do we sometimes prefix an address with `byte`? e.g. `mov cx, byte [rdi]`

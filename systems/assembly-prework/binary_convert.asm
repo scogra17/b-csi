@@ -10,12 +10,8 @@ binary_convert:
 	je .exit              
 	inc rdi               ; increment rdi to point to the next ASCII value
 	shl rax, 1			  ; reaching this command indicates we have a new ASCII character so multiply the existing total by 2 by left shifting
-	cmp r12b, 0b00110001  ; compare with the ASCII for "1", and add to the running total if they match
-	je .add_one           
-	jmp .loop
-
-.add_one:
-	add rax, 1
+	and r12, 1           ; isolate lowest order bit of ASCII char
+	add rax, r12         
 	jmp .loop
 
 .exit:
