@@ -47,6 +47,15 @@
 ## Opcodes
 ### Move
 * mov rdx, rbx // copies what's stored in rbx into rdx 
+	* movb (move byte)
+	* movw (move word)
+	* movl (move double word)
+	* movq (move quad word)
+* lea rdx, rbx // copy the mem address i rbx into rdx
+	* lea can also be used to compactly represent arithmetic operations, e.g. `leaq rax, 7[rdx, rdx, 4]` is equivalent to 5x + 7 if rdx contains value x
+
+#### Memory scaling
+* movq rdx, 8[rsp] // copies the second quad word from the stack to register rdx
 
 ### Arithmetic
 * add r10, r11 // add what's stored at r10 and r11 and store in r10
@@ -60,10 +69,22 @@
 
 ### Control flow
 * cmp rax, 0      // compare value stored in rax with 0 
+	* cmp 1, 3    // 1-3 = -2 
 * jmp .printer    // jump to .printer:
 * je .printer     // jumpt to .printer if previous `cmp` was equal
 * jne .printer    // jump to .printer if previous `cmp` was not equal
 * call str_to_int // call function 
+
+#### Conditional codes 
+* CF: carry flag
+* ZF: zero flag - most recent operation yielded a zero 
+* SF: sign flag - most recent operation yielded a negative
+* OF: overflow flag - most recent operation caused a two's compelement overflow
+* apart from `leaq` all arithmetic operations impact conditional codes: 
+	* for logical operations, CF and OF are zeroed 
+	* for shift operations, the CF is set to the last bit shifted out, while the overflow flag is set to 0
+	* inc and dec set the OF and ZF, but leave the CF unchanged
+	* cmp operations do the same as sub but without affecting the register values. ZF is set to 0 if the operands are equal
 
 ### Logical operators
 and r10, r11 // r10 and (&=) r11
@@ -129,6 +150,16 @@ add rsp, 0x10 // deallocate stack frame
 ret 
 ```
 
+caller saved registers 
+------------------------------------------------------
+rax, rcx, rdx, rsi, rdi, rsp, r8, r9, r10, r11
+
+callee saved registers* 
+------------------------------------------------------
+rbx, rbp, r12-r15                 
+
+* callee save register: callee must preserve values in these registers. Caller saved registers can be modified by any function -- caller should save these register values to the stack if they will be needed later 
+
 ## Floating point
 * xmm1: return register 
 
@@ -149,7 +180,25 @@ loop:
 ```
 one difference is that lldb did not reach the label until the preceding `.` was added
 
+## Working with files
+* compile only: `gcc -O1 -S -masm=intel [c file name, e.g. mstore.c]` -> produces `mstore.s`
+	* `-masm=intel` since default is ATT 
+* compile and assemble: `gcc -O1 -c [c file name, e.g. mstore.c]` -> produces `mstore.o`
+* compile, assemble and link: `gcc -g -O1 -o prog [c file name, e.g. mstore.c]` -> produces executable called `prog`
+	* `-g` enables debugging
+* disassemble: `objdump -d [object file name, e.g. mstore.o]`
+
+## Other convensions
+* when copying partial data
+	* when generating only 1- or 2-byte quantities, the remaining bits are left unchanged; with 4-byte quantities, the remaining bits are zeroed 
+
 ## Questions 
 * How do cmp, sub etc. use rflags and the carry flag in particular? What uses do the carry flags have? 
 * What is the significance of `movzx` vs. `mov`? 
+	* A: `movz` zero extends, `movzbw` zero extends byte to word 
+	* `movs` sign extends, replicating the most significant bit of the source operand
 * Why do we sometimes prefix an address with `byte`? e.g. `mov cx, byte [rdi]`
+* Where are the condition flags stored? `rflags`?
+	* https://en.wikipedia.org/wiki/FLAGS_register 
+* Text Figure 3.32 vs. 3.25. Shouldn't the return address have the lowest address as was the case in the earlier diagram? 
+	* The return address in 3.32 is for the main function. Once proc is called, the return address is added to the stack as shown in figure 3.29
